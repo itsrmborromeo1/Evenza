@@ -3,6 +3,7 @@ import axios from "axios";
 // ✅ Initialize Axios with Vite-compatible environment variable
 const api = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
+  withCredentials: true, // Ensures authentication and cookies
 });
 
 // ✅ Request Interceptor for Debugging
