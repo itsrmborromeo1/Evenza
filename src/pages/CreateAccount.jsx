@@ -1,153 +1,124 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Form, Input, Button, Select } from "antd";
 import { Country, State } from "country-state-city";
-import { apiPost } from "../utils/apiHelper";
 import "../styles/createAccount.css";
 
-const CreateAccount = ({ onSubmit }) => {
-  const [formData, setFormData] = useState({
-    full_name: "",
-    email: "",
-    user_name: "",
-    password: "",
-    country: "",
-    city: "",
-  });
+const { Option } = Select;
 
+const CreateAccount = () => {
+  const [form] = Form.useForm();
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState("");
 
   useEffect(() => {
     setCountries(Country.getAllCountries());
   }, []);
 
-  useEffect(() => {
-    if (formData.country) {
-      const stateList = State.getStatesOfCountry(formData.country);
-      setCities(stateList);
-      setFormData((prev) => ({ ...prev, city: "" }));
-    }
-  }, [formData.country]);
-
-  const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+  const handleCountryChange = (code) => {
+    setSelectedCountry(code);
+    const states = State.getStatesOfCountry(code);
+    setCities(states);
+    form.setFieldsValue({ city: "" });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const result = await apiPost("auth/sign-up", formData);
-      if (result.success) {
-        alert("Account created successfully!");
-        if (onSubmit) onSubmit(formData);
-      } else {
-        alert(result.message || "Signup failed");
-      }
-    } catch (error) {
-      console.error("Signup error:", error);
-      alert("An error occurred during signup.");
-    }
+  const handleSubmit = (values) => {
+    console.log("Form Submitted:", values);
   };
 
   return (
-    <div className="create-account-container">
-      <form onSubmit={handleSubmit} className="create-account-form">
+    <div className="create-account-wrapper">
+      <div className="create-account-container">
         <h2 className="form-title">Create Account</h2>
-        <div className="form-grid">
-          <div className="form-group">
-            <label className="form-label">Full Name</label>
-            <input
-              type="text"
-              name="full_name"
-              value={formData.full_name}
-              onChange={handleChange}
-              required
-              className="form-input"
-            />
-          </div>
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleSubmit}
+          className="create-account-form"
+        >
+          <Form.Item
+            label="Full Name"
+            name="fullName"
+            rules={[{ required: true, message: "Please enter your full name" }]}
+          >
+            <Input className="form-input" />
+          </Form.Item>
 
-          <div className="form-group">
-            <label className="form-label">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="form-input"
-            />
-          </div>
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[
+              { required: true, message: "Please enter your email" },
+              { type: "email", message: "Invalid email format" },
+            ]}
+          >
+            <Input className="form-input" />
+          </Form.Item>
 
-          <div className="form-group">
-            <label className="form-label">Username</label>
-            <input
-              type="text"
-              name="user_name"
-              value={formData.user_name}
-              onChange={handleChange}
-              required
-              className="form-input"
-            />
-          </div>
+          <Form.Item
+            label="Username"
+            name="username"
+            rules={[{ required: true, message: "Please enter a username" }]}
+          >
+            <Input className="form-input" />
+          </Form.Item>
 
-          <div className="form-group">
-            <label className="form-label">Password</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="form-input"
-            />
-          </div>
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[{ required: true, message: "Please enter a password" }]}
+          >
+            <Input.Password className="form-input" />
+          </Form.Item>
 
-          <div className="form-group">
-            <label className="form-label">Country</label>
-            <select
-              name="country"
-              value={formData.country}
-              onChange={handleChange}
-              required
+          <Form.Item
+            label="Country"
+            name="country"
+            rules={[{ required: true, message: "Please select a country" }]}
+          >
+            <Select
+              showSearch
+              placeholder="Select country"
+              optionFilterProp="children"
+              onChange={handleCountryChange}
+              filterOption={(input, option) =>
+                option.children.toLowerCase().includes(input.toLowerCase())
+              }
               className="form-input"
             >
-              <option value="">Select Country</option>
-              {countries.map((country) => (
-                <option key={country.isoCode} value={country.isoCode}>
-                  {country.name}
-                </option>
+              {countries.map((c) => (
+                <Option key={c.isoCode} value={c.isoCode}>
+                  {c.name}
+                </Option>
               ))}
-            </select>
-          </div>
+            </Select>
+          </Form.Item>
 
-          <div className="form-group">
-            <label className="form-label">City</label>
-            <select
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              required
+          <Form.Item
+            label="City/State"
+            name="city"
+            rules={[{ required: true, message: "Please select a city" }]}
+          >
+            <Select
+              placeholder="Select city"
               className="form-input"
+              disabled={!selectedCountry}
             >
-              <option value="">Select City</option>
-              {cities.map((item) => (
-                <option key={item.isoCode} value={item.name}>
-                  {item.name}
-                </option>
+              {cities.map((s) => (
+                <Option key={s.isoCode} value={s.name}>
+                  {s.name}
+                </Option>
               ))}
-            </select>
-          </div>
-        </div>
+            </Select>
+          </Form.Item>
 
-        <div className="submit-button-wrapper text-right mt-6">
-          <button type="submit" className="submit-button w-full">
-            Register
-          </button>
-        </div>
-      </form>
+          <Form.Item>
+            <Button htmlType="submit" className="submit-button">
+              Register
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
     </div>
   );
 };
