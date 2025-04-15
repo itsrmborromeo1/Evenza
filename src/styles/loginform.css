@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+.e-login-wrapper {
+  @apply flex justify-center items-center min-h-screen w-screen bg-gray-100 ;
+}
+
+/* Adaptive container */
+.e-login-container {
+  width: 100%;
+  min-width: 100%;
+  padding: 40px 24px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+
+/* Base styling */
+.login-title-a,
+.sub-title-a {
+  text-align: left;
+  padding: 0;
+  margin: 0;
+}
+
+.login-title-a {
+  padding-bottom: 0.5rem;
+  color: #150074;
+  font-weight: bold !important;
+}
+
+.sub-title-a {
+  padding-bottom: 1.2rem;
+  color: #000;
+}
+
+.e-form-container {
+  @apply w-full bg-white border border-gray-300 rounded-lg shadow-lg p-6;
+}
+
+.input-field {
+  @apply w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none;
+  min-height: 42px;
+}
+
+.register-link {
+  @apply mt-4 text-center;
+}
+
+.register-link button {
+  @apply p-0 bg-transparent text-black;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.register-link button:hover {
+  @apply underline;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.register-link button:focus,
+.register-link button:active {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* ✅ Media Queries */
+@media (max-width: 480px) {
+  
+  .e-login-wrapper {
+    max-width: 100%   !important;
+    height: 100vh;
+   
+  }
+}
+
+@media (min-width: 768px) {
+  .e-login-container {
+    max-width: 100vw;
+    padding: 48px 32px;
+  }
+
+  .input-field {
+    min-height: 44px;
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .e-login-container {
+    max-width: 560px;
+    padding: 56px 40px;
+  }
+
+  .login-title-a {
+    font-size: 1.75rem;
+  }
+
+  .sub-title-a {
+    font-size: 1.125rem;
+  }
+
+  .btn-login {
+    font-size: 1rem;
+    padding: 12px 0;
+  }
+}

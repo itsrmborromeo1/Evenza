@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.create-account-wrapper {
+  @apply min-h-screen flex items-center justify-center bg-gray-100 px-4 py-8;
+  background-color: white;
+  min-width: 560px;
+  border-radius: 10px
+}
+
+.create-account-container {
+  @apply w-full max-w-xl bg-white rounded-xl shadow-md p-8;
+  width: 100%;
+  max-width: 500px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.form-title {
+  @apply text-3xl font-bold text-gray-800 mb-6 text-center;
+  color: black;
+}
+
+.create-account-form .ant-form-item-label > label {
+  @apply text-sm font-medium text-gray-700;
+}
+
+.form-input {
+  @apply !w-full !px-3 !py-2 !border !border-gray-300 !rounded-md focus:!ring-2 focus:!ring-blue-500;
+}
+
+.submit-button {
+  @apply w-full bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-700 transition;
+  width: 100%;
+  background-color: #2652ff;
+  color: #fff;
+  font-weight: bold ;
+  font-size: 16px;
+  height: 40px;
+}
